@@ -1,7 +1,56 @@
+# before_script:
+#   - ruby -v
+# Tests:
+#   stage: test
+#   script:
+#     - which ruby
+image: "ruby:2.5"
+services:
+  - redis:latest
+  - postgres:latest
+
+variables:
+  POSTGRES_USER: drivehub
+  POSTGRES_DB: drivehub_test
+  POSTGRES_PASSWORD: ""
+
 before_script:
-  - ruby -v
-Tests:
+  - bundle -v
+  - node -v
+  - bundle check || bundle install
+  - yarn install --cache-folder ~/.cache/yarn
+
+stages:
+  - test
+  - deploy
+
+test:
   stage: test
   script:
-    - which ruby
+  - bundle install --without development:test --path vendor/bundle --binstubs vendor/bundle/bin -j4 --deployment
+  - npm install -g n
+  - sudo n lts
+  - yarn install
+  - rake assets:precompile
+  - rake assets:clean
 
+# - git push
+
+Deploy Production:
+  stage: deploy
+  retry: 2
+  only:
+    - master
+  script:
+# git pull
+    - echo "testing production"
+    - rails test
+    
+Deploy Staging:
+  stage: deploy
+  #allow_failure: true
+  retry: 2
+  except:
+    - master
+  script:
+    - echo "testing staging"
