@@ -1,0 +1,7 @@
+before_script:
+  - ruby -v
+Tests:
+  stage: test
+  script:
+    - which ruby
+
