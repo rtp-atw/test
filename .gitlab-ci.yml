@@ -14,7 +14,6 @@ variables:
   POSTGRES_DB: drivehub_test
   POSTGRES_PASSWORD: ""
 
-  
 before_script:
   - bundle -v
   - node -v
@@ -55,3 +54,5 @@ Deploy Staging:
     - master
   script:
     - echo "testing staging"
+
+    
