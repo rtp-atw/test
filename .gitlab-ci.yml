@@ -68,7 +68,7 @@ deploy_staging:
     ##
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
-    
+
     - echo "Deploy to staging server"
     - ssh root@178.128.215.254 "cd test; git pull origin tester"
     - ssh root@178.128.215.254 "cd test; bundle install --without development:test --path vendor/bundle --binstubs vendor/bundle/bin -j4 --deployment"
@@ -81,4 +81,4 @@ deploy_staging:
   environment:
     name: staging
   only:
-    - migration
+    - tester
