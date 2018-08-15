@@ -13,7 +13,11 @@ variables:
   POSTGRES_USER: drivehub
   POSTGRES_DB: drivehub_test
   POSTGRES_PASSWORD: ""
-
+# Cache gems in between builds
+cache:
+  paths:
+    - vendor/ruby
+    
 before_script:
   # Install node and some other deps
   - curl -sL https://deb.nodesource.com/setup_8.x | bash -
