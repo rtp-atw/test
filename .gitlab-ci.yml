@@ -16,7 +16,7 @@ variables:
 
 before_script:
   # Install node and some other deps
-  - curl -sL https://deb.nodesource.com/setup_8.x | -E bash -
+  - curl -sL https://deb.nodesource.com/setup_8.x | bash -
   - apt-get update -yq
   - apt-get install -y nodejs build-essential
   # Install yarn
