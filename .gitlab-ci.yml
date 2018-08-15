@@ -32,6 +32,7 @@ before_script:
   - yarn install
   - gem update rake
 
+  
 stages:
   - test
   - deploy
