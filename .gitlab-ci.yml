@@ -74,6 +74,8 @@ deploy_staging:
 
     - echo "Deploy to staging server"
     - ssh root@178.128.215.254 "cd test; git pull origin tester"
+    - ssh root@178.128.215.254 "cd test; apt-get install -y python-psycopg2"
+    - ssh root@178.128.215.254 "cd test; apt-get install -y libpq-dev"
     - ssh root@178.128.215.254 "cd test; gem install bundler"
     - ssh root@178.128.215.254 "cd test; bundle install --without development:test --path vendor/bundle --binstubs vendor/bundle/bin -j4 --deployment"
     - ssh root@178.128.215.254 "cd test; npm install -g n"
