@@ -31,6 +31,7 @@ before_script:
   - gem install rails -v 5.2.0
   - apt-get install -y python-psycopg2
   - apt-get install -y libpq-dev
+  - gem update rake
 # Project setup
   # Check if the dependencies are ok, if not install what is missing
 stages:
