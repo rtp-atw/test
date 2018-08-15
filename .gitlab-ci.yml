@@ -23,7 +23,7 @@ before_script:
   - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
   - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
   - apt-get update -yq
-  - apt-get update && sudo apt-get install yarn
+  - apt-get update && apt-get install yarn
 # Project setup
   # Check if the dependencies are ok, if not install what is missing
   - bundle install --without development:test --path vendor/bundle --binstubs vendor/bundle/bin -j4 --deployment
