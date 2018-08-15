@@ -29,14 +29,10 @@ before_script:
   - apt-get update -yq
   - apt-get update && apt-get install yarn
   - gem install rails -v 5.2.0
+  - apt-get install python-psycopg2
+  - apt-get install libpq-dev
 # Project setup
   # Check if the dependencies are ok, if not install what is missing
-  - bundle install --without development:test --path vendor/bundle --binstubs vendor/bundle/bin -j4 --deployment
-  - npm install -g n
-  - n lts
-  - yarn install
-  - gem update rake
-
 stages:
   - test
   - deploy
@@ -79,6 +75,7 @@ deploy_staging:
     - ssh root@178.128.215.254 "cd test; bundle install --without development:test --path vendor/bundle --binstubs vendor/bundle/bin -j4 --deployment"
     - ssh root@178.128.215.254 "cd test; npm install -g n"
     - ssh root@178.128.215.254 "cd test; n lts"
+    - ssh root@178.128.215.254 "cd test; gem update rake"
     - ssh root@178.128.215.254 screen
     #- ssh root@178.128.215.254 "cd drivehub; bundle exec puma -C ./config/puma.rb"
     - ssh root@178.128.215.254 "cd test; rails s"
