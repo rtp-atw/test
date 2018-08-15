@@ -16,19 +16,19 @@ variables:
 
 before_script:
   # Install node and some other deps
-  - curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+  - curl -sL https://deb.nodesource.com/setup_8.x | -E bash -
   - apt-get update -yq
   - apt-get install -y nodejs build-essential
   # Install yarn
-  - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-  - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+  - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+  - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
   - apt-get update -yq
   - apt-get update && sudo apt-get install yarn
 # Project setup
   # Check if the dependencies are ok, if not install what is missing
   - bundle install --without development:test --path vendor/bundle --binstubs vendor/bundle/bin -j4 --deployment
   - npm install -g n
-  - sudo n lts
+  - n lts
   - yarn install
 
 stages:
