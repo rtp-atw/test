@@ -29,8 +29,8 @@ before_script:
   - apt-get update -yq
   - apt-get update && apt-get install yarn
   - gem install rails -v 5.2.0
-  - apt-get install python-psycopg2
-  - apt-get install libpq-dev
+  - apt-get install -y python-psycopg2
+  - apt-get install -y libpq-dev
 # Project setup
   # Check if the dependencies are ok, if not install what is missing
 stages:
