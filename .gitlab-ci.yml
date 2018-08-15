@@ -15,10 +15,22 @@ variables:
   POSTGRES_PASSWORD: ""
 
 before_script:
-  - bundle -v
-  - node -v
-  - bundle check || bundle install
-  - yarn install --cache-folder ~/.cache/yarn
+  # Install node and some other deps
+  - curl -sL https://deb.nodesource.com/setup_8.x | bash -
+  - apt-get update -yq
+  - apt-get install -y apt-transport-https build-essential cmake nodejs python-software-properties software-properties-common unzip
+  
+  # Install yarn
+  - wget -q -O - https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+  - echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list
+  - apt-get update -yq
+  - apt-get install -y yarn
+# Project setup
+  # Check if the dependencies are ok, if not install what is missing
+  - bundle install --without development:test --path vendor/bundle --binstubs vendor/bundle/bin -j4 --deployment
+  - npm install -g n
+  - sudo n lts
+  - yarn install
 
 stages:
   - test
@@ -27,10 +39,6 @@ stages:
 test:
   stage: test
   script:
-  - bundle install --without development:test --path vendor/bundle --binstubs vendor/bundle/bin -j4 --deployment
-  - npm install -g n
-  - sudo n lts
-  - yarn install
   - rake assets:precompile
   - rake assets:clean
 
