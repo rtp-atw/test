@@ -4,7 +4,7 @@
 #   stage: test
 #   script:
 #     - which ruby
-image: "ruby:2.5"
+image: "ruby:latest"
 services:
   - redis:latest
   - postgres:latest
@@ -18,19 +18,19 @@ before_script:
   # Install node and some other deps
   - curl -sL https://deb.nodesource.com/setup_8.x | bash -
   - apt-get update -yq
-  - apt-get install -y apt-transport-https build-essential cmake nodejs python-software-properties software-properties-common unzip
-  
+  - apt-get install -y nodejs build-essential
   # Install yarn
-  - wget -q -O - https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-  - echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list
+  - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+  - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
   - apt-get update -yq
-  - apt-get install -y yarn
+  - apt-get update && apt-get install yarn
 # Project setup
   # Check if the dependencies are ok, if not install what is missing
   - bundle install --without development:test --path vendor/bundle --binstubs vendor/bundle/bin -j4 --deployment
   - npm install -g n
-  - sudo n lts
+  - n lts
   - yarn install
+  - gem update rake
 
 stages:
   - test
