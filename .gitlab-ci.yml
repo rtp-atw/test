@@ -30,6 +30,7 @@ before_script:
   - npm install -g n
   - n lts
   - yarn install
+  - gem update rake
 
 stages:
   - test
