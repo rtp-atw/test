@@ -24,6 +24,7 @@ before_script:
   - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
   - apt-get update -yq
   - apt-get update && apt-get install yarn
+  - gem install rails -v 5.2.0
 # Project setup
   # Check if the dependencies are ok, if not install what is missing
   - bundle install --without development:test --path vendor/bundle --binstubs vendor/bundle/bin -j4 --deployment
@@ -63,4 +64,10 @@ Deploy Staging:
   script:
     - echo "testing staging"
 
+# deploy:
+#   type: deploy
+#   environment: production
+#   script:
+#   - gem install dpl
+#   - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_PRODUCTION_KEY
     
