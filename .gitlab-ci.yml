@@ -13,6 +13,10 @@ variables:
   POSTGRES_USER: drivehub
   POSTGRES_DB: drivehub_test
   POSTGRES_PASSWORD: ""
+# Cache gems in between builds
+cache:
+  paths:
+    - vendor/ruby
 
 before_script:
   # Install node and some other deps
@@ -25,14 +29,12 @@ before_script:
   - apt-get update -yq
   - apt-get update && apt-get install yarn
   - gem install rails -v 5.2.0
+  - apt-get install -y python-psycopg2
+  - apt-get install -y libpq-dev
+  - gem install bundler
+  - bundle install --without development:test --path vendor/bundle --binstubs vendor/bundle/bin -j4 --deployment
 # Project setup
   # Check if the dependencies are ok, if not install what is missing
-  - bundle install --without development:test --path vendor/bundle --binstubs vendor/bundle/bin -j4 --deployment
-  - npm install -g n
-  - n lts
-  - yarn install
-  - gem update rake
-
 stages:
   - test
   - deploy
@@ -40,6 +42,7 @@ stages:
 test:
   stage: test
   script:
+  - gem update rake
   - rake assets:precompile
   - rake assets:clean
 
@@ -68,17 +71,21 @@ deploy_staging:
     ##
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
-    
+
     - echo "Deploy to staging server"
-    - ssh root@178.128.215.254 "cd test; git pull origin tester"
-    - ssh root@178.128.215.254 "cd test; bundle install --without development:test --path vendor/bundle --binstubs vendor/bundle/bin -j4 --deployment"
-    - ssh root@178.128.215.254 "cd test; npm install -g n"
-    - ssh root@178.128.215.254 "cd test; n lts"
+     - ssh root@178.128.215.254 "cd test; git pull origin tester"
+    # - ssh root@178.128.215.254 "cd test; apt-get install -y python-psycopg2"
+    # - ssh root@178.128.215.254 "cd test; apt-get install -y libpq-dev"
+    # - ssh root@178.128.215.254 "cd test; gem install bundler"
+    # - ssh root@178.128.215.254 "cd test; bundle install --without development:test --path vendor/bundle --binstubs vendor/bundle/bin -j4 --deployment"
+    # - ssh root@178.128.215.254 "cd test; npm install -g n"
+    # - ssh root@178.128.215.254 "cd test; n lts"
+    # - ssh root@178.128.215.254 "cd test; gem update rake"
     - ssh root@178.128.215.254 screen
     #- ssh root@178.128.215.254 "cd drivehub; bundle exec puma -C ./config/puma.rb"
-    - ssh root@178.128.215.254 "cd test; railss s"
+    - ssh root@178.128.215.254 "cd test; rails s"
     - ssh root@178.128.215.254 /etc/init.d/nginx restart
   environment:
     name: staging
   only:
-    - migration
+    - tester
