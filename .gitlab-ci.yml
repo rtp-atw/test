@@ -31,7 +31,8 @@ before_script:
   - gem install rails -v 5.2.0
   - apt-get install -y python-psycopg2
   - apt-get install -y libpq-dev
-  - gem update rake
+  - gem install bundler
+  - bundle install --without development:test --path vendor/bundle --binstubs vendor/bundle/bin -j4 --deployment
 # Project setup
   # Check if the dependencies are ok, if not install what is missing
 stages:
@@ -41,6 +42,7 @@ stages:
 test:
   stage: test
   script:
+  - gem update rake
   - rake assets:precompile
   - rake assets:clean
 
