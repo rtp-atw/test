@@ -17,7 +17,7 @@ variables:
 cache:
   paths:
     - vendor/ruby
-    
+
 before_script:
   # Install node and some other deps
   - curl -sL https://deb.nodesource.com/setup_8.x | bash -
@@ -75,12 +75,13 @@ deploy_staging:
 
     - echo "Deploy to staging server"
     - ssh root@178.128.215.254 "cd test; git pull origin tester"
+    - ssh root@178.128.215.254 "cd test; gem install bundler"
     - ssh root@178.128.215.254 "cd test; bundle install --without development:test --path vendor/bundle --binstubs vendor/bundle/bin -j4 --deployment"
     - ssh root@178.128.215.254 "cd test; npm install -g n"
     - ssh root@178.128.215.254 "cd test; n lts"
     - ssh root@178.128.215.254 screen
     #- ssh root@178.128.215.254 "cd drivehub; bundle exec puma -C ./config/puma.rb"
-    - ssh root@178.128.215.254 "cd test; railss s"
+    - ssh root@178.128.215.254 "cd test; rails s"
     - ssh root@178.128.215.254 /etc/init.d/nginx restart
   environment:
     name: staging
